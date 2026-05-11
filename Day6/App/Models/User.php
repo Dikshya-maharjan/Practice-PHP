@@ -4,5 +4,8 @@ namespace App\Models;
     public function getName(){
         return "John";
     }
- }
+  
+    }
+      
+ 
 ?>
