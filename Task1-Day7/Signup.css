@@ -34,19 +34,21 @@ box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
 .mainContainer label{
     font-weight: 700;
 }
-#login{
-    width: 50%;
+#signup{
+    width: 80%;
     margin: 20px auto;
     display: block;
-    background-color: rgb(74, 74, 189);
+    background-color: rgba(5, 59, 25, 0.797);
     color: white;
     cursor: pointer;
     border-radius: 15px;
     border: none;
 }
-#login:hover{
-        background-color: rgb(61, 61, 216);
-
+#signup:hover{
+    background-color: rgb(16, 120, 39);
+}
+.mainContainer a{
+    text-decoration: none;
 }
 .mainContainer p{
     text-align: center;
