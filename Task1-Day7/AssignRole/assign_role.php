@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../Database/Database.php';
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
     echo "<script>
     alert('Access Denied');
@@ -16,13 +17,12 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
     <title>Form</title>
 </head>
 <body>
-    <form method="post">
+    <form method="post" action="assign_role_process.php">
         <h2>Assign Role</h2>
         <label>Select User</label>
         <select name="email">
             <!-- php code add here to connect with database -->
              <?php
-                include '..Database/Database.php';
                 //read email from users table
                     $sql="SELECT email FROM users";
                     $stmt=$pdo->prepare($sql);
@@ -37,7 +37,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
              ?>
 </select>
 <br><br>
-//select role
+<!-- //select role -->
 <label>Select Role</lable>
 <select name='role_id'>
     <?php
