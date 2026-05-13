@@ -6,7 +6,10 @@ $email=$_POST['email'];
 $password=$_POST['password'];
 
 if(empty($email) || empty($password)){
-    die("ALL FIELDS ARE REQUIRED");
+    echo "<script>
+    alert('Email and Password should not be empty');
+    window.location.href='LoginPage.html';
+    </script>";
 }
 
 $sql="SELECT * FROM users WHERE email=:email";
@@ -18,12 +21,16 @@ if($user && password_verify($password,$user['password'])){
     //$password->what users inputs and $user['passwor'] is what stored in database
         $_SESSION['email']=$user['email'];
         $_SESSION['message']="Logged in Successfully";
+    
         header("Location:/internphp/task1-day7/HomePage.php");
         exit();
 
        
     }else{
-        die("Invalid");
+        echo "<script>
+            alert('Invalid');
+            window.location.href='LoginPage.html';
+        </script>";
     }
 
 
