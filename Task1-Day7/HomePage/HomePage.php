@@ -56,9 +56,18 @@ if(!isset($_SESSION['email'])){
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($menus) {
                 foreach ($menus as $menu){
-echo "<a href='dashboard.php?menu_id={$menu['id']}'>
-        <button id='menuBtn'>{$menu['name']}</button>
-      </a>";                }
+
+            $link=match($menu['id']){
+            1=>'../Dashboard/Dashboard.php',
+            2=>'../AssignRole/assign_role_users.php',
+            3=>'../Users/UserList.php',
+            4=>'../Report/Reports.php',
+            default=>'#'
+            };
+    echo "<a href='$link?menu_id={$menu['id']}'>
+            <button id='menuBtn'>{$menu['name']}</button>
+          </a>";
+}
             } else {
                 echo "No menus found for this role.";
             }
