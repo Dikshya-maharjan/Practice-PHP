@@ -1,5 +1,5 @@
 <?php
-include 'Database.php';
+include '../Database/Database.php';
 
 $email=$_POST['email'];
 $password=$_POST['password'];
@@ -21,13 +21,13 @@ if($password !== $confirmpw){
 if(!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', $email)){
         echo "<script>
         alert('Invalid Email');
-        window.location.href='SignupPage.html';
+        window.location.href='../Signup/SignupPage.html';
         </script>";
 }
 if(strlen($password)<6){
     echo "<script>
     alert('Password must contain at least 6 letters');
-    window.location.href='SignupPage.html';
+    window.location.href='../Signup/SignupPage.html';
     <script>";
 }
 $check="SELECT * FROM users WHERE email=:email";
@@ -38,7 +38,7 @@ $stmt->execute();
 if($stmt->rowCount()>0){
         echo "<script>
         alert('Email already exists');
-        window.location.href='SignupPage.html';
+        window.location.href='../Signup/SignupPage.html';
 
         </script>
         ";
@@ -52,6 +52,6 @@ $stmt->bindparam(':password',$hashedpassword);
 $stmt->execute();
 $_SESSION['message'] = "Account created successfully! Please login.";
 
-header("Location:LoginPage.html");
+header("Location:../Login/LoginPage.html");
 exit();
 ?>
