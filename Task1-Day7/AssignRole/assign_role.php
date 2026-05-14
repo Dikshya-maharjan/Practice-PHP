@@ -17,21 +17,23 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
     <title>Form</title>
 </head>
 <body>
-    <form method="post" action="assign_role_process.php">
+    <form method="post" action="../AssignRole/assign_role_process.php">
         <h2>Assign Role</h2>
         <label>Select User</label>
-        <select name="email">
+        <select name="user_id">
             <!-- php code add here to connect with database -->
              <?php
                 //read email from users table
-                    $sql="SELECT email FROM users";
+                    $sql="SELECT id,email FROM users";
                     $stmt=$pdo->prepare($sql);
                     $stmt->execute();
                     $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
                     //use foreach loop to get data from the database
                     foreach($users as $user){
+                            $id = $user['id'];
+
                             $email = $user['email'];
-                        echo "<option value='$email'>$email</option>";
+                        echo "<option value='$id'>$email</option>";
                         //{} because it is inside string
                     }
              ?>
