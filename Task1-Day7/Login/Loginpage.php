@@ -39,7 +39,9 @@ if($user && password_verify($password,$user['password'])){
     $role=$stmt->fetchColumn();
         $_SESSION['email']=$user['email'];
         $_SESSION['role']=$role;
+        $_SESSION['role_id']=$role_id;
         $_SESSION['message']="Logged in Successfully";
+   
     
         header("Location:/internphp/task1-day7/HomePage/HomePage.php");
         exit();
