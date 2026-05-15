@@ -35,28 +35,33 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Users/UserList.css">
     <title>Document</title>
 </head>
 <body>
-    <table border="1">
-    <tr>
-        <th>User ID</th>
-        <th>User Name</th>
-        <th>Role ID</th>
-        <th>Role Name</th>
-    </tr>
+    <div class="table-container">
 
-    <?php foreach ($data as $row) { ?>
+
+        <table border="1">
         <tr>
-            <td><?php echo $row['user_id'];?></td>
-            <td><?php echo $row['user_name']; ?></td>
-            <td><?php echo $row['role_id'];?></td>
-            <td><?php echo $row['role_name']; ?></td>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Role ID</th>
+            <th>Role Name</th>
         </tr>
-    <?php } ?>
-</table>
-<a href="../HomePage/HomePage.php">
-<Button>Back</Button>
-</a>
+    
+        <?php foreach ($data as $row) { ?>
+            <tr>
+                <td><?php echo $row['user_id'];?></td>
+                <td><?php echo $row['user_name']; ?></td>
+                <td><?php echo $row['role_id'];?></td>
+                <td><?php echo $row['role_name']; ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+    <a href="../HomePage/HomePage.php">
+    <button>Back</button>
+    </a>
+    </div>
 </body>
 </html>
