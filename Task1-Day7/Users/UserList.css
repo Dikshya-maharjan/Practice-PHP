@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+}
+table{
+      
+    margin: 10px;
+}
+table,th,td{
+    margin: 15px;
+    border-collapse: collapse;
+    min-width: 250px;
+    min-height:50px;
+    max-height: 100px;
+
+}
+td,th{
+   justify-content: center;
+   text-align: center; 
+   padding: 6px;
+
+}
+th{
+    background-color: aliceblue;
+}
+.table-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+button{
+    background-color: rgb(15, 15, 199);
+    color:white;
+    min-width: 100px;
+    height:4vh;
+    cursor: pointer;
+    border: none;
+}
+button:hover{
+    background-color: blue;
+}
