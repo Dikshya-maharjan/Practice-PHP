@@ -24,7 +24,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
             <!-- php code add here to connect with database -->
              <?php
                 //read email from users table
-                    $sql="SELECT id,email FROM users";
+                    $sql="SELECT id,email FROM users ";
                     $stmt=$pdo->prepare($sql);
                     $stmt->execute();
                     $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -44,7 +44,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
 <select name='role_id'>
     <?php
     //read data from roles
-     $sql="SELECT * FROM roles";
+     $sql="SELECT * FROM roles WHERE role_name!='superadmin' ";
      $stmt=$pdo->prepare($sql);
     $stmt->execute();
     $roles=$stmt->fetchall(PDO::FETCH_ASSOC);
