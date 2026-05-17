@@ -48,6 +48,9 @@ $stmt->execute();
     echo "<pre>";
 print_r($_SESSION);
 echo "</pre>";
+   
+    
+
         header("Location:/internphp/task1-day7/HomePage/HomePage.php");
         
        
