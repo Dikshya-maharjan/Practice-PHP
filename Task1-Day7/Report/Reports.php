@@ -1,4 +1,4 @@
-<!-- <?php
+ <?php
 session_start();
 include_once "../Database/Database.php";
 if(!isset($_SESSION['email'])){
@@ -57,4 +57,4 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </a>
 </body>
-</html> -->
+</html> 
