@@ -29,59 +29,63 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Users/UserList.css">
+    <link rel="stylesheet" href="assignrole.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Document</title>
 </head>
 <body>
-    <div class="table_container">
-    <?php 
-        if ($_SESSION['role'] === 'superadmin') { ?>
-            <a href="../AssignRole/assign_role.php">
-                <button id="assignBtn">Go to Assign Role</button>
-            </a>
-        <?php } ?>
-        <h2>Access Role </h2>
-        <table border="1">
-        <tr>
-            <th>User ID</th>
-            <th>User Name</th>
-            <th>Role ID</th>
-            <th>Role Name</th>
-            <th>Action</th>
-        </tr>
-    
-        <?php foreach ($data as $row) { ?>
-            <tr>
-                <td><?php echo $row['user_id'];?></td>
-                <td><?php echo $row['user_name']; ?></td>
-                <td><?php echo $row['role_id'];?></td>
-                <td><?php echo $row['role_name']; ?></td>
-                <td>
-        <!-- EDIT -->
-        <a href="../Button/edit_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>
-                    onclick="return confirm('Are you sure you want to update this role');">
+    <div class="table-container">
 
-            <button style="background:green;color:white;padding:5px 10px;border:none;border-radius:5px;">
-                Edit
-            </button>
+        <a href="../HomePage/HomePage.php" class="back-btn">
+       <button class="btn btn-lg"> <i class="bi bi-arrow-left-square-fill"></i></button>
+        </a>
+<h2>Access Role</h2>
+
+<table border="1" class="table table-hover">
+<tr>
+    <th>User ID</th>
+    <th>User Name</th>
+    <th>Role ID</th>
+    <th>Role Name</th>
+    <th>Action</th>
+</tr>
+
+<?php foreach ($data as $row) { ?>
+<tr>
+    <td><?php echo $row['user_id']; ?></td>
+    <td><?php echo $row['user_name']; ?></td>
+    <td><?php echo $row['role_id']; ?></td>
+    <td><?php echo $row['role_name']; ?></td>
+
+    <td>
+        <a href="../Button/edit_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
+           onclick="return confirm('Edit this role?');">
+            <button class="btn btn-primary">Edit</button>
         </a>
 
-        <!-- DELETE -->
         <a href="../Button/delete_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
-           onclick="return confirm('Are you sure you want to delete this role?');">
-            <button style="background:red;color:white;padding:5px 10px;border:none;border-radius:5px;">
-                Delete
-            </button>
+           onclick="return confirm('Delete this role?');">
+            <button class="btn btn-danger">Delete</button>
         </a>
     </td>
+</tr>
+<?php } ?>
 
-            
-            </tr>
-        <?php } ?>
-    </table>
-    <a href="../HomePage/HomePage.php">
-    <button>Back</button>
-    </div>
-</a>
+</table>
+
+<br>
+
+
+
+<br><br>
+
+<?php if ($_SESSION['role'] === 'superadmin') { ?>
+    <a href="../AssignRole/assign_role.php">
+        <button class="btn btn-success">Go to Assign Role</button>
+    </a>
+<?php } ?>
+
+</div>
 </body>
 </html>
