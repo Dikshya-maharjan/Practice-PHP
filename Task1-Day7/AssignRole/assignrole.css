@@ -1,0 +1,126 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* PAGE BACKGROUND */
+body {
+    background: #f5f7fb;
+    padding: 20px;
+}
+
+/* MAIN CONTAINER */
+.table-container {
+    max-width: 1000px;
+    margin: auto;
+
+    background: #fff;
+    padding: 20px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* TITLE */
+h2 {
+    text-align: center;
+    font-size: 22px;
+    color: #333;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+/* HEADER */
+th {
+    background: #2d4bff;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* CELLS */
+td {
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ROW HOVER */
+tr:hover {
+    background: #f0f4ff;
+}
+
+/* BACK BUTTON */
+.back-btn button {
+    color: black;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.back-btn button:hover {
+    background: #e9eff3;
+    transform: translateX(-3px);
+}
+
+/* EDIT BUTTON */
+.btn-primary {
+    background: #198754 !important;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+
+/* DELETE BUTTON */
+.btn-danger {
+    background: #dc3545 !important;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+}
+
+/* ASSIGN BUTTON */
+.btn-success {
+    width: 100%;
+    padding: 10px;
+
+    font-size: 15px;
+    border-radius: 8px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .table-container {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
