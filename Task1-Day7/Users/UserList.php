@@ -27,13 +27,17 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <link rel="stylesheet" href="UserList.css">
     <title>User List</title>
 </head>
 <body>
     <div class="table-Container">
 
+        <a href="../HomePage/HomePage.php" class="back-btn">
+       <button class="btn btn-lg"> <i class="bi bi-arrow-left-square-fill"></i></button>
+        </a>
         <table border="1" class="table table-hover">
         
         <tr id="row">
@@ -53,9 +57,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         </table>
         <br><br>
-        <a href="../HomePage/HomePage.php">
-        <button>Back</button>
-        </a>
+       
     </div>
 
 </body>
