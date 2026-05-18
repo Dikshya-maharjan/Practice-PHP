@@ -34,7 +34,12 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <div class="table_container">
-
+    <?php 
+        if ($_SESSION['role'] === 'superadmin') { ?>
+            <a href="../AssignRole/assign_role.php">
+                <button id="assignBtn">Go to Assign Role</button>
+            </a>
+        <?php } ?>
         <h2>Access Role </h2>
         <table border="1">
         <tr>
@@ -42,6 +47,7 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>User Name</th>
             <th>Role ID</th>
             <th>Role Name</th>
+            <th>Action</th>
         </tr>
     
         <?php foreach ($data as $row) { ?>
@@ -50,6 +56,26 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $row['user_name']; ?></td>
                 <td><?php echo $row['role_id'];?></td>
                 <td><?php echo $row['role_name']; ?></td>
+                <td>
+        <!-- EDIT -->
+        <a href="../Button/edit_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>
+                    onclick="return confirm('Are you sure you want to update this role');">
+
+            <button style="background:green;color:white;padding:5px 10px;border:none;border-radius:5px;">
+                Edit
+            </button>
+        </a>
+
+        <!-- DELETE -->
+        <a href="../Button/delete_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
+           onclick="return confirm('Are you sure you want to delete this role?');">
+            <button style="background:red;color:white;padding:5px 10px;border:none;border-radius:5px;">
+                Delete
+            </button>
+        </a>
+    </td>
+
+            
             </tr>
         <?php } ?>
     </table>
