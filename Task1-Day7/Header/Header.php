@@ -1,26 +1,25 @@
 <?php
-include "../Database/Database.php";
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['email'])) {
-    header("Location: LoginPage.html");
+    header("Location: /InternPHP/Task1-Day7/LoginPage.html");
     exit();
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header</title>
+<div class="header">
 
-</head>
+    <div class="header-left">
 
-<body>
+        <img src="/InternPHP/Task1-Day7/Header/logo.png" alt="logo">
 
-<div class="mainContainer">
-    <h2>Welcome <?php echo $_SESSION['email']; ?></h2>
+        <h3>
+            Welcome,
+            <?php echo htmlspecialchars($_SESSION['email']); ?>
+        </h3>
+
+    </div>
+
 </div>
-
-</body>
-</html>
