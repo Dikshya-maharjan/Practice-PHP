@@ -10,62 +10,81 @@
 body {
     background: #f7f9fc;
     color: #2c2c2c;
-
     padding-bottom: 60px;
 }
 
-/* ========================= */
 /* NAVBAR */
-/* ========================= */
 .navbar {
+    width: 100%;
+
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between; /* LEFT + RIGHT */
+
     align-items: center;
 
-    gap: 18px;
-
-    flex-wrap: wrap;
-
-    padding: 10px 20px;
+    padding: 15px 35px;
 
     background: #ffffff;
 
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* NAV LINKS */
+/* LEFT SIDE (MENU) */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+/* RIGHT SIDE (LOGOUT) */
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* COMMON LINKS */
 .navbar a {
     text-decoration: none;
     color: #444;
 
-    padding: 8px 14px;
-    border-radius: 6px;
+    padding: 10px 16px;
+
+    border-radius: 8px;
 
     font-size: 14px;
-    white-space: nowrap;
+    font-weight: 500;
 
     transition: 0.2s;
-    font-weight: 500;
 }
 
+/* HOVER */
 .navbar a:hover {
     background: #e8ecff;
     color: #2d4bff;
 }
 
-/* ========================= */
-/* MAIN CONTAINER */
-/* ========================= */
-.mainContainer {
-    width: 90%;
-    max-width: 420px;
+/* LOGOUT STYLE */
+.nav-right a {
+    background: #ff4d4d;
+    color: white;
+}
 
-    margin: 40px auto;
+.nav-right a:hover {
+    background: #e60000;
+}
+/* ================= MAIN CARD ================= */
+
+.mainContainer {
+    width: 95%;
+    max-width: 650px;
+
+    margin: 50px auto;
 
     background: #ffffff;
-    padding: 25px;
 
-    border-radius: 14px;
+    padding: 40px;
+
+    border-radius: 18px;
 
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 
@@ -74,15 +93,15 @@ body {
 
 /* TITLE */
 .mainContainer h2 {
-    font-size: 22px;
+    font-size: 24px;
     margin-bottom: 10px;
     font-weight: 600;
 }
 
 /* ROLE TEXT */
 .role {
-    margin: 12px 0;
-    font-size: 15px;
+    margin: 15px 0;
+    font-size: 16px;
     color: #555;
 }
 
@@ -94,36 +113,17 @@ body {
 /* DROPDOWN */
 select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
 
-    border-radius: 8px;
+    border-radius: 10px;
+
     border: 1px solid #ddd;
 
-    margin: 15px 0;
+    margin: 18px 0;
 
     outline: none;
+
     background: #fff;
-}
-
-/* LOGOUT BUTTON */
-#logoutBtn {
-    width: 100%;
-    padding: 10px;
-
-    background: #ff4d4d;
-    color: white;
-
-    border: none;
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-    font-weight: 500;
-}
-
-#logoutBtn:hover {
-    background: #e60000;
 }
 
 /* SUCCESS MESSAGE */
@@ -131,10 +131,12 @@ select {
     background: #eaf7ee;
     color: #1e7d34;
 
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
 
-    margin-bottom: 10px;
+    border-radius: 10px;
+
+    margin-bottom: 15px;
+
     font-size: 14px;
 }
 
@@ -152,6 +154,7 @@ footer {
     text-align: center;
 
     padding: 10px;
+
     font-size: 14px;
 }
 
@@ -159,11 +162,17 @@ footer {
 @media (max-width: 600px) {
 
     .navbar {
-        justify-content: center; /* better mobile look */
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .nav-right, .nav-left {
+        justify-content: center;
     }
 
     .mainContainer {
         margin: 20px 10px;
-        padding: 18px;
+        padding: 20px;
     }
 }
