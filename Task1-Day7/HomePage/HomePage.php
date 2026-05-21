@@ -3,17 +3,31 @@ session_start();
 
 include "../Database/Database.php";
 
-if(!isset($_SESSION['email'])){//user loggedin bhayena ki login ma redirect hunxa
+if(!isset($_SESSION['email'])){
     header("Location: LoginPage.html");
+    exit();
+}
+
+/*
+ ROLE SWITCH HANDLEr
+ensures navbar updates when role changes
+*/
+if(isset($_GET['role_id'])){
+    $_SESSION['role_id'] = $_GET['role_id'];
+
+    header("Location: HomePage.php");
     exit();
 }
 
 include "../Header/Header.php";
 
-$user_id = $_SESSION['user_id'] ?? null;//current user id lai fetch garcha
+$user_id = $_SESSION['user_id'] ?? null;
 
 $roles = [];
 
+/*
+ GET ALL ROLES OF CURRENT USER
+*/
 if($user_id){
 
     $sql = "
@@ -39,7 +53,6 @@ if($user_id){
     <title>Home</title>
 
     <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
-
     <link rel="stylesheet" href="/InternPHP/Task1-Day7/Header/header.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -48,10 +61,9 @@ if($user_id){
 
 <body>
 
-
 <div class="navbar">
 
-    <!-- MENU LINKS -->
+    <!-- LEFT SIDE MENU -->
     <div class="nav-left">
 
         <?php
@@ -87,7 +99,7 @@ if($user_id){
 
     </div>
 
-    <!--LOGOUT -->
+    <!-- RIGHT SIDE LOGOUT -->
     <div class="nav-right">
         <a href="../Logout/logout.php"
            onclick="return confirm('Are you sure you want to logout?');">
@@ -97,8 +109,7 @@ if($user_id){
 
 </div>
 
-
-<!-- MAIN CARD -->
+<!-- MAIN CONTENT -->
 <div class="mainContainer">
 
 <?php
@@ -115,18 +126,17 @@ if(isset($_SESSION['message'])){
 </h2>
 
 <p class="role">
-
     Logged in as:
-
     <span>
         <?php echo htmlspecialchars($_SESSION['role']); ?>
     </span>
-
 </p>
 
+<!-- ROLE DROPDOWN -->
 <div class="btn-group">
 
-  <button type="button" class="btn btn-info dropdown-toggle"
+  <button type="button"
+          class="btn btn-info dropdown-toggle"
           data-bs-toggle="dropdown"
           aria-expanded="false">
 
@@ -165,11 +175,10 @@ if(isset($_SESSION['message'])){
 
 </div>
 
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<!-- to open dropdown js is added -->
+<!-- add js to enbale dropdown of boostrsap -->
 </body>
 </html>
 
