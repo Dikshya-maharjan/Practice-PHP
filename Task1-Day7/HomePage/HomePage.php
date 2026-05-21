@@ -3,12 +3,32 @@ session_start();
 
 include "../Database/Database.php";
 
-if(!isset($_SESSION['email'])){
+if(!isset($_SESSION['email'])){//user loggedin bhayena ki login ma redirect hunxa
     header("Location: LoginPage.html");
     exit();
 }
 
 include "../Header/Header.php";
+
+$user_id = $_SESSION['user_id'] ?? null;//current user id lai fetch garcha
+
+$roles = [];
+
+if($user_id){
+
+    $sql = "
+    SELECT r.id, r.role_name
+    FROM roles r
+    JOIN role_user ru ON r.id = ru.role_id
+    WHERE ru.user_id = :user_id
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+
+    $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,17 +38,20 @@ include "../Header/Header.php";
 
     <title>Home</title>
 
-<link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
-    <link rel="stylesheet"
-    href="/InternPHP/Task1-Day7/Header/header.css">
+    <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
+
+    <link rel="stylesheet" href="/InternPHP/Task1-Day7/Header/header.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 
 <body>
 
 
-  <div class="navbar">
+<div class="navbar">
 
+    <!-- MENU LINKS -->
     <div class="nav-left">
 
         <?php
@@ -64,7 +87,7 @@ include "../Header/Header.php";
 
     </div>
 
-    <!-- RIGHT SIDE (LOGOUT) -->
+    <!--LOGOUT -->
     <div class="nav-right">
         <a href="../Logout/logout.php"
            onclick="return confirm('Are you sure you want to logout?');">
@@ -101,10 +124,52 @@ if(isset($_SESSION['message'])){
 
 </p>
 
+<div class="btn-group">
+
+  <button type="button" class="btn btn-info dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+
+    Select Role
+
+  </button>
+
+  <ul class="dropdown-menu">
+
+    <?php if(empty($roles)) { ?>
+
+      <li>
+        <span class="dropdown-item text-muted">
+            No roles assigned
+        </span>
+      </li>
+
+    <?php } else { ?>
+
+      <?php foreach($roles as $role) { ?>
+
+        <li>
+          <a class="dropdown-item"
+             href="?role_id=<?php echo $role['id']; ?>">
+
+            <?php echo htmlspecialchars($role['role_name']); ?>
+
+          </a>
+        </li>
+
+      <?php } ?>
+
+    <?php } ?>
+
+  </ul>
+
+</div>
 
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<!-- to open dropdown js is added -->
 </body>
 </html>
 
