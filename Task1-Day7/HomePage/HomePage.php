@@ -18,9 +18,7 @@ include "../Header/Header.php";
 
     <title>Home</title>
 
-    <!-- HOMEPAGE CSS -->
 <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
-    <!-- HEADER CSS -->
     <link rel="stylesheet"
     href="/InternPHP/Task1-Day7/Header/header.css">
 
@@ -31,7 +29,6 @@ include "../Header/Header.php";
 
   <div class="navbar">
 
-    <!-- LEFT SIDE (MENU LINKS) -->
     <div class="nav-left">
 
         <?php
