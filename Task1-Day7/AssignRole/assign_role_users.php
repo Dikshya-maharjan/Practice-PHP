@@ -174,7 +174,8 @@ Update Role
 
 <td>
 
-<a href="?menu_id=<?php echo $menu_id; ?>&edit=1&user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>">
+<a href="?menu_id=<?php echo $menu_id; ?>&edit=1&user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
+onclick="return confirm('Edit this role?');">
 <button class="btn btn-primary">Edit</button>
 </a>
 
