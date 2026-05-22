@@ -100,12 +100,13 @@ if($user_id){
     </div>
 
     <!-- RIGHT SIDE LOGOUT -->
-    <div class="nav-right">
-        <a href="../Logout/logout.php"
-           onclick="return confirm('Are you sure you want to logout?');">
-           Logout
-        </a>
-    </div>
+   <div class="nav-right">
+    <a href="../Logout/logout.php"
+       onclick="return confirm('Are you sure you want to logout?');">
+       
+       <i class="bi bi-box-arrow-right"></i>
+    </a>
+</div>
 
 </div>
 
