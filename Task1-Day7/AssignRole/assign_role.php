@@ -1,64 +1,100 @@
 <?php
 session_start();
-include '../Database/Database.php';
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'superadmin') {
-    echo "<script>
-    alert('Access Denied');
-    window.location.href='Loginpage.php'; 
-    </script>";
+include_once "../Database/Database.php";
+
+if(!isset($_SESSION['email'])){
+    header("Location:../Login/LoginPage.html");
     exit();
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
-</head>
-<body>
-    <form method="post" action="../AssignRole/assign_role_process.php">
-        <h2>Assign Role</h2>
-        <label>Select User</label>
-        <select name="user_id">
-            <!-- php code add here to connect with database -->
-             <?php
-                //read email from users table
-                    $sql="SELECT id,email FROM users ";
-                    $stmt=$pdo->prepare($sql);
-                    $stmt->execute();
-                    $users=$stmt->fetchAll(PDO::FETCH_ASSOC);
-                    //use foreach loop to get data from the database
-                    foreach($users as $user){
-                            $id = $user['id'];
 
-                            $email = $user['email'];
-                        echo "<option value='$id'>$email</option>";
-                        //{} because it is inside string
-                    }
-             ?>
+$users = $pdo->query("SELECT id,email FROM users")->fetchAll(PDO::FETCH_ASSOC);
+$roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
+
+$data = $pdo->query("
+SELECT u.id user_id, u.email user_name, r.id role_id, r.role_name
+FROM role_user ru
+JOIN users u ON ru.user_id=u.id
+JOIN roles r ON ru.role_id=r.id
+")->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+<body>
+
+<div class="container mt-4">
+<a href="../HomePage/HomePage.php" class="btn btn-outline-dark mb-3">
+    <i class="bi bi-arrow-left"> </i> 
+</a>
+
+<div class="card p-4">
+
+<h4 id="title">Assign Role</h4>
+
+<form method="POST" action="assign_role_process.php">
+
+<select name="user_id" id="user_id" class="form-control mb-2">
+<?php foreach($users as $u){ ?>
+<option value="<?= $u['id'] ?>"><?= $u['email'] ?></option>
+<?php } ?>
 </select>
-<br><br>
-<!-- //select role -->
-<label>Select Role</lable>
-<select name='role_id'>
-    <?php
-    //read data from roles
-     $sql="SELECT * FROM roles WHERE role_name!='superadmin' ";
-     $stmt=$pdo->prepare($sql);
-    $stmt->execute();
-    $roles=$stmt->fetchall(PDO::FETCH_ASSOC);
-    //use foreach loop to get data from database
-    foreach($roles as $role){
-            $id = $role['id'];
-            $name=$role['role_name'];
-        echo "<option value='$id'>
-            $name       
-             </option>";
-    }
-     ?>
+
+<select name="role_id" id="role_id" class="form-control mb-2">
+<?php foreach($roles as $r){ ?>
+<option value="<?= $r['id'] ?>"><?= $r['role_name'] ?></option>
+<?php } ?>
 </select>
-    <button type="submit">Assign Role</button>
+
+<button class="btn btn-success" id="btn">
+Assign Role
+</button>
+
 </form>
+
+</div>
+
+<br>
+
+<table class="table table-hover">
+<tr>
+<th>User</th><th>Role</th><th>Action</th>
+</tr>
+
+<?php foreach($data as $row){ ?>
+
+<tr>
+<td><?= $row['user_name'] ?></td>
+<td><?= $row['role_name'] ?></td>
+
+<td>
+
+<button class="btn btn-primary"
+onclick="editRole(<?= $row['user_id'] ?>, <?= $row['role_id'] ?>)">
+Edit
+</button>
+
+<a href="delete_role.php?user_id=<?= $row['user_id'] ?>&role_id=<?= $row['role_id'] ?>"
+class="btn btn-danger"
+onclick="return confirm('Delete?')">
+Delete
+</a>
+
+</td>
+</tr>
+
+<?php } ?>
+
+</table>
+
+</div>
+
+
+
 </body>
 </html>
