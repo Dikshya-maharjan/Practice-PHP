@@ -29,7 +29,7 @@ $stmt->execute();
     $role_id = $stmt->fetchColumn();
 
     /* GET ROLE NAME (SAFE) */
-    $role = "user"; // default
+    $role = "user";
 
   
     //get role name
@@ -45,11 +45,6 @@ $stmt->execute();
         $_SESSION['role']=$role;
         $_SESSION['role_id']=$role_id;
         $_SESSION['message']="Logged in Successfully";
-    echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
-   
-    
 
         header("Location:/internphp/task1-day7/HomePage/HomePage.php");
         
