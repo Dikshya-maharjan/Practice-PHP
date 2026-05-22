@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once "../Database/Database.php";
+include '../Header/header.php';
 
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
@@ -23,6 +24,7 @@ JOIN roles r ON ru.role_id=r.id
 <head>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="../Header/header.css"
 </head>
 
 <body>
@@ -170,6 +172,8 @@ function editRole(user, role){
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
-
+<?php
+include '../Footer/footer.html';
+?>
 </body>
 </html>
