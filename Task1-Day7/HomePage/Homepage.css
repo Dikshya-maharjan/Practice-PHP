@@ -62,17 +62,33 @@ body {
     background: #e8ecff;
     color: #2d4bff;
 }
-
-/* LOGOUT STYLE */
 .nav-right a {
-    background: #ff4d4d;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    color: #444;
+
+    font-size: 18px; /* icon size */
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    transition: 0.2s ease;
 }
 
+/* hover effect */
 .nav-right a:hover {
-    background: #e60000;
+    background: #ffecec;
+    color: #e74c3c; /* red hover for logout */
 }
-/* ================= MAIN CARD ================= */
+
+/* icon only styling (optional improvement) */
+.nav-right a i {
+    font-size: 20px;
+}
 
 .mainContainer {
     width: 95%;
