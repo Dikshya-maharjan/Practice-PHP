@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include_once "../Database/Database.php";
 
 if(!isset($_SESSION['email'])){
@@ -8,221 +7,169 @@ if(!isset($_SESSION['email'])){
     exit();
 }
 
-$menu_id = $_GET['menu_id'] ?? null;
+$users = $pdo->query("SELECT id,email FROM users")->fetchAll(PDO::FETCH_ASSOC);
+$roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
 
-$editData = null;
-
-if(isset($_GET['edit']) && isset($_GET['user_id']) && isset($_GET['role_id'])){
-
-    $user_id = $_GET['user_id'];
-    $role_id = $_GET['role_id'];
-
-    $editSql = "SELECT 
-        u.id AS user_id,
-        u.email AS user_name,
-        r.id AS role_id,
-        r.role_name
-    FROM role_user ru
-    JOIN users u ON ru.user_id = u.id
-    JOIN roles r ON ru.role_id = r.id
-    WHERE ru.user_id = :user_id
-    AND ru.role_id = :role_id
-    ";
-
-    $editStmt = $pdo->prepare($editSql);
-    $editStmt->bindParam(':user_id', $user_id);
-    $editStmt->bindParam(':role_id', $role_id);
-    $editStmt->execute();
-
-    $editData = $editStmt->fetch(PDO::FETCH_ASSOC);
-}
-
-if(isset($_POST['update_role'])){
-
-    $user_id = $_POST['user_id'];
-    $old_role_id = $_POST['old_role_id'];
-    $new_role_id = $_POST['new_role_id'];
-
-    $updateSql = "
-    UPDATE role_user
-    SET role_id = :new_role_id
-    WHERE user_id = :user_id
-    AND role_id = :old_role_id
-    ";
-
-    $updateStmt = $pdo->prepare($updateSql);
-    $updateStmt->bindParam(':new_role_id', $new_role_id);
-    $updateStmt->bindParam(':user_id', $user_id);
-    $updateStmt->bindParam(':old_role_id', $old_role_id);
-    $updateStmt->execute();
-
-    header("Location: assign_role_users.php?menu_id=$menu_id");
-    exit();
-}
-
-$roleSql = "SELECT * FROM roles";
-$roleStmt = $pdo->prepare($roleSql);
-$roleStmt->execute();
-$roles = $roleStmt->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = "
-SELECT 
-    u.id AS user_id,
-    u.email AS user_name,
-    r.id AS role_id,
-    r.role_name
+$data = $pdo->query("
+SELECT u.id user_id, u.email user_name, r.id role_id, r.role_name
 FROM role_user ru
-JOIN users u ON ru.user_id = u.id
-JOIN roles r ON ru.role_id = r.id
-";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+JOIN users u ON ru.user_id=u.id
+JOIN roles r ON ru.role_id=r.id
+")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="assignrole.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-<title>Access Role</title>
 </head>
 
 <body>
 
-<div class="table-container">
+<div class="container mt-4">
 
-<a href="../HomePage/HomePage.php" class="back-btn">
-<button class="btn btn-lg">
-<i class="bi bi-arrow-left-square-fill"></i>
-</button>
+<a href="../HomePage/HomePage.php" class="btn btn-outline-dark mb-3">
+    <i class="bi bi-arrow-left"> </i> 
 </a>
 
-<?php if($editData){ ?>
+<!-- FORM -->
+<div class="card p-4">
 
-<div class="card p-3 mb-4">
+<h4 id="title">Assign Role</h4>
 
-<h4>Edit Role</h4>
+<form method="POST" action="assign_role_process.php">
 
-<form method="POST">
-
-<input type="hidden" name="user_id" value="<?php echo $editData['user_id']; ?>">
-<input type="hidden" name="old_role_id" value="<?php echo $editData['role_id']; ?>">
-
-<div class="mb-3">
-<label>User</label>
-<input type="text" class="form-control" value="<?php echo $editData['user_name']; ?>" readonly>
-</div>
-
-<div class="mb-3">
-<label>Select New Role</label>
-
-<select name="new_role_id" class="form-control">
-
-<?php foreach($roles as $role){ ?>
-
-<option value="<?php echo $role['id']; ?>"
-<?php if($role['id'] == $editData['role_id']) echo "selected"; ?>>
-
-<?php echo $role['role_name']; ?>
-
+<select name="user_id" id="user_id" class="form-control mb-2">
+<?php
+ foreach($users as $u){
+   ?>
+<option value="<?= $u['id'] ?>"><?= $u['email'] ?>
 </option>
-
 <?php } ?>
-
 </select>
 
-</div>
+<select name="role_id" id="role_id" class="form-control mb-2">
+<?php foreach($roles as $r){ ?>
+<option value="<?= $r['id'] ?>"><?= $r['role_name'] ?></option>
+<?php } ?>
+</select>
 
-<button type="submit" name="update_role" class="btn btn-success">
-Update Role
+<button class="btn btn-success" id="btn">
+Assign Role
 </button>
 
 </form>
 
 </div>
 
-<?php } ?>
+<br>
 
-<h2>Access Role</h2>
-
-<table class="table table-hover" border="1">
-
+<!-- TABLE -->
+<table class="table table-hover">
 <tr>
-<th>User ID</th>
-<th>User Name</th>
-<th>Role ID</th>
-<th>Role Name</th>
-<th>Action</th>
+<th>User</th><th>Role</th><th>Action</th>
 </tr>
 
-<?php foreach ($data as $row) { ?>
+<?php foreach($data as $row){ ?>
 
 <tr>
-
-<td><?php echo $row['user_id']; ?></td>
-<td><?php echo $row['user_name']; ?></td>
-<td><?php echo $row['role_id']; ?></td>
-<td><?php echo $row['role_name']; ?></td>
+<td><?= $row['user_name'] ?></td>
+<td><?= $row['role_name'] ?></td>
 
 <td>
 
-<a href="?menu_id=<?php echo $menu_id; ?>&edit=1&user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
-onclick="return confirm('Edit this role?');">
-<button class="btn btn-primary">Edit</button>
-</a>
+<button class="btn btn-primary"
+data-bs-toggle="modal"
+data-bs-target="#editModal<?= $row['user_id'].'_'.$row['role_id'] ?>">
+Edit
+</button>
 
-<a href="../Button/delete_role.php?user_id=<?php echo $row['user_id']; ?>&role_id=<?php echo $row['role_id']; ?>"
-onclick="return confirm('Delete this role?');">
+<!-- MODAL -->
+<div class="modal fade"
+id="editModal<?= $row['user_id'].'_'.$row['role_id'] ?>"
+tabindex="-1">
 
-<button class="btn btn-danger">Delete</button>
+  <div class="modal-dialog">
 
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Role</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <p>Do you want to edit this role?</p>
+
+        <strong>User:</strong> <?= $row['user_name'] ?><br>
+        <strong>Role:</strong> <?= $row['role_name'] ?>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button"
+        class="btn btn-secondary"
+        data-bs-dismiss="modal">
+        Close
+        </button>
+
+        <button type="button"
+        class="btn btn-primary"
+        data-bs-dismiss="modal"
+        onclick="fillEdit(
+            <?= $row['user_id'] ?>,
+            <?= $row['role_id'] ?>
+        )">
+        Update Role
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- DELETE -->
+<a href="../Button/delete_role.php?user_id=<?= $row['user_id'] ?>&role_id=<?= $row['role_id'] ?>"
+class="btn btn-danger"
+onclick="return confirm('Delete?')">
+Delete
 </a>
 
 </td>
-
 </tr>
 
 <?php } ?>
 
 </table>
 
-<div class="card p-3 mb-3 mt-4">
-
-<h5>Send Message</h5>
-
-<form method="POST">
-
-<div class="mb-3">
-<textarea name="message" class="form-control" rows="4" placeholder="Type your message here..." required></textarea>
 </div>
 
-<button type="submit" class="btn btn-primary">
-Send Message
-</button>
 
-</form>
 
-</div>
+</script>
 
-<?php if ($_SESSION['role'] === 'superadmin') { ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function editRole(user, role){
+    document.getElementById("user_id").value=user;
+    document.getElementById("role_id").value=role;
+  
+//jaba edit btn click huncha jaba update role bhanera title aucha
+    document.getElementById("title").innerText = "Update Role";
+    //assign role
+    document.getElementById("btn").innerText = "Update Role";
+    document.getElementById("btn").classList.remove("btn-success");
+    document.getElementById("btn").classList.add("btn-primary");
 
-<a href="../AssignRole/assign_role.php">
-<button class="btn btn-success">
-Go to Assign Role
-</button>
-</a>
-
-<?php } ?>
-
-</div>
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
 
 </body>
 </html>
