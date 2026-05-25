@@ -1,33 +1,24 @@
 <?php
 session_start();
 
-include "../Database/Database.php";
+include '../Database/Database.php';
 
 if(!isset($_SESSION['email'])){
-    header("Location: LoginPage.html");
+    header("Location:../Login/LoginPage.html");
     exit();
 }
 
-/*
- ROLE SWITCH HANDLEr
-ensures navbar updates when role changes
-*/
-if(isset($_GET['role_id'])){
-    $_SESSION['role_id'] = $_GET['role_id'];
+$email = $_SESSION['email'];
 
-    header("Location: HomePage.php");
-    exit();
-}
+$stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+$stmt->execute([$email]);
+$user_id = $stmt->fetchColumn();
 
-include "../Header/Header.php";
-
-$user_id = $_SESSION['user_id'] ?? null;
-
+/* DEFAULT VALUES */
 $roles = [];
+$currentRole = "Select Role";
 
-/*
- GET ALL ROLES OF CURRENT USER
-*/
+/* GET ALL ROLES */
 if($user_id){
 
     $sql = "
@@ -42,30 +33,37 @@ if($user_id){
     $stmt->execute();
 
     $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    /* SET CURRENT ROLE */
+    if(!empty($_SESSION['role_id'])){
+        foreach($roles as $r){
+            if($r['id'] == $_SESSION['role_id']){
+                $currentRole = $r['role_name'];
+                break;
+            }
+        }
+    }
 }
+
+include '../Header/Header.php';
 ?>
 
 <!DOCTYPE html>
 <html>
-
 <head>
-
     <title>Home</title>
 
     <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
     <link rel="stylesheet" href="/InternPHP/Task1-Day7/Header/header.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 
 <body>
 
+<!-- NAVBAR (UNCHANGED) -->
 <div class="navbar">
 
-    <!-- LEFT SIDE MENU -->
     <div class="nav-left">
-
         <?php
         if(!empty($_SESSION['role_id'])) {
 
@@ -96,90 +94,26 @@ if($user_id){
             }
         }
         ?>
-
     </div>
 
-    <!-- RIGHT SIDE LOGOUT -->
-   <div class="nav-right">
-    <a href="../Logout/logout.php"
-       onclick="return confirm('Are you sure you want to logout?');">
-       
-       <i class="bi bi-box-arrow-right"></i>
-    </a>
-</div>
+    <div class="nav-right">
+        <a href="../Logout/logout.php"
+           onclick="return confirm('Are you sure you want to logout?');">
+            <i class="bi bi-box-arrow-right"></i>
+        </a>
+    </div>
 
 </div>
 
 <!-- MAIN CONTENT -->
 <div class="mainContainer">
 
-<?php
-if(isset($_SESSION['message'])){
-    echo "<div class='success'>
-            " . $_SESSION['message'] . "
-          </div>";
-}
-?>
-
-<h2>
-    Welcome,
-    <?php echo $_SESSION['email']; ?>
-</h2>
-
-<p class="role">
-    Logged in as:
-    <span>
-        <?php echo htmlspecialchars($_SESSION['role']); ?>
-    </span>
-</p>
-
-<!-- ROLE DROPDOWN -->
-<div class="btn-group">
-
-  <button type="button"
-          class="btn btn-info dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false">
-
-    Select Role
-
-  </button>
-
-  <ul class="dropdown-menu">
-
-    <?php if(empty($roles)) { ?>
-
-      <li>
-        <span class="dropdown-item text-muted">
-            No roles assigned
-        </span>
-      </li>
-
-    <?php } else { ?>
-
-      <?php foreach($roles as $role) { ?>
-
-        <li>
-          <a class="dropdown-item"
-             href="?role_id=<?php echo $role['id']; ?>">
-
-            <?php echo htmlspecialchars($role['role_name']); ?>
-
-          </a>
-        </li>
-
-      <?php } ?>
-
-    <?php } ?>
-
-  </ul>
-
-</div>
+<!-- ROLE DROPDOWN (FIXED) -->
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<!-- add js to enbale dropdown of boostrsap -->
+
 </body>
 </html>
 
