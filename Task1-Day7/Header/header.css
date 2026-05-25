@@ -1,60 +1,22 @@
-/* HEADER */
-.header{
-    
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 15px 35px;
-
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
-
-    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+/* IMPORTANT RESET */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
 }
 
-/* LEFT SIDE */
-.header-left{
-    display: flex;
-    align-items: center;
-    gap: 15px;
+/* THIS FIXES SIDE-BY-SIDE ISSUE */
+.page-content {
+    display: block;
+    width: 100%;
 }
 
-/* LOGO */
-.header img{
-    width: 55px;
-    height: 55px;
-
-    object-fit: cover;
-
-    border-radius: 50%;
-
+/* TABLE CONTAINER */
+.table-container {
+    width: 80%;
+    margin: 40px auto;
     background: white;
-    padding: 5px;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-/* WELCOME TEXT */
-.header h3{
-    color: white;
-
-    font-size: 18px;
-    font-weight: 600;
-}
-
-/* RESPONSIVE */
-@media(max-width: 768px){
-
-    .header{
-        flex-direction: column;
-
-        gap: 15px;
-
-        text-align: center;
-    }
-
-    .header-left{
-        flex-direction: column;
-    }
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
