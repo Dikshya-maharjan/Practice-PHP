@@ -41,20 +41,34 @@ JOIN roles r ON ru.role_id=r.id
 <h4 id="title">Assign Role</h4>
 
 <form method="POST" action="assign_role_process.php">
+<select name="user_id" id="user_id" class="form-control mb-2" required>
 
-<select name="user_id" id="user_id" class="form-control mb-2">
+<option value="" selected disabled>
+  Select an Email
+</option>
+
 <?php
- foreach($users as $u){
-   ?>
-<option value="<?= $u['id'] ?>"><?= $u['email'] ?>
+foreach($users as $u){
+?>
+<option value="<?= $u['id'] ?>">
+<?= $u['email'] ?>
 </option>
 <?php } ?>
+
 </select>
 
-<select name="role_id" id="role_id" class="form-control mb-2">
+<select name="role_id" id="role_id" class="form-control mb-2" required>
+
+<option value="" selected disabled>
+Choose Role
+</option>
+
 <?php foreach($roles as $r){ ?>
-<option value="<?= $r['id'] ?>"><?= $r['role_name'] ?></option>
+<option value="<?= $r['id'] ?>">
+<?= $r['role_name'] ?>
+</option>
 <?php } ?>
+
 </select>
 
 <button class="btn btn-success" id="btn">
@@ -121,7 +135,7 @@ tabindex="-1">
         <button type="button"
         class="btn btn-primary"
         data-bs-dismiss="modal"
-        onclick="fillEdit(
+        onclick="editRole(
             <?= $row['user_id'] ?>,
             <?= $row['role_id'] ?>
         )">
