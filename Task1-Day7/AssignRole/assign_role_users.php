@@ -9,13 +9,16 @@ if(!isset($_SESSION['email'])){
 }
 
 $users = $pdo->query("SELECT id,email FROM users")->fetchAll(PDO::FETCH_ASSOC);
-$roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
+$roles = $pdo->query("SELECT * FROM roles
+WHERE id !=1
+")->fetchAll(PDO::FETCH_ASSOC);
 
 $data = $pdo->query("
 SELECT u.id user_id, u.email user_name, r.id role_id, r.role_name
 FROM role_user ru
-JOIN users u ON ru.user_id=u.id
-JOIN roles r ON ru.role_id=r.id
+JOIN users u ON ru.user_id = u.id
+JOIN roles r ON ru.role_id = r.id
+WHERE r.id != 1
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
