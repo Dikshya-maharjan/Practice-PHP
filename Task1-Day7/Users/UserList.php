@@ -2,7 +2,6 @@
 session_start();
 
 include '../Database/Database.php';
-
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
     exit();
@@ -28,37 +27,44 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
     <link rel="stylesheet" href="UserList.css">
+    <link rel="stylesheet" href="../Header/header.css">
     <title>User List</title>
 </head>
 <body>
-    <div class="table-Container">
+<?php include '../Header/Header.php'; ?>
 
-        <a href="../HomePage/HomePage.php" class="back-btn">
-       <button class="btn btn-lg"> <i class="bi bi-arrow-left-square-fill"></i></button>
-        </a>
-        <table border="1" class="table table-hover">
-        
-        <tr id="row">
-            <th id="head">User ID</th>
-            <th id="head">User Email</th>
-        </tr>
-        
-        <?php foreach($data as $row){ ?>
-        
-        <tr>
-            <td ><?php echo $row['user_id']; ?></td>
-            <td><?php echo $row['user_name']; ?></td>
-        </tr>
-        
-        <?php } ?>
-        
-        
+
+<div class="page-content">
+
+    <div class="table-container">
+
+     <a href="../HomePage/HomePage.php" class="back-btn">
+    <i class="bi bi-arrow-left"></i>
+</a>
+
+
+        <table class="table table-hover">
+            <tr>
+                <th>User ID</th>
+                <th>User Email</th>
+            </tr>
+
+            <?php foreach($data as $row){ ?>
+            <tr>
+                <td><?= $row['user_id'] ?></td>
+                <td><?= $row['user_name'] ?></td>
+            </tr>
+            <?php } ?>
         </table>
-        <br><br>
-       
+
     </div>
 
+</div>
+
+<?php 
+include '../Footer/footer.html'; 
+?>
 </body>
 </html>
+
