@@ -32,8 +32,10 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>User List</title>
 </head>
 <body>
-<?php include '../Header/Header.php'; ?>
+<?php
+include '../Header/Header.php';
 
+?>
 
 <div class="page-content">
 
