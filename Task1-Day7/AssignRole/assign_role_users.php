@@ -20,6 +20,7 @@ JOIN users u ON ru.user_id = u.id
 JOIN roles r ON ru.role_id = r.id
 WHERE r.id != 1
 ")->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +82,26 @@ Assign Role
 </form>
 
 </div>
+<!-- filter seacrh -->
+<form method="GET" class="mb-3">
 
+
+    <select name="role" class="form-control mb-2">
+        <option value="">All Roles</option>
+
+        <?php foreach($roles as $r){ ?>
+            <option value="<?= $r['id'] ?>"
+                <?= (isset($_GET['role']) && $_GET['role'] == $r['id']) ? 'selected' : '' ?>>
+
+                <?= $r['role_name'] ?>
+            </option>
+        <?php } ?>
+
+    </select>
+
+    <button class="btn btn-primary" onclick="clickFilter()">Filter</button>
+
+</form>
 <br>
 
 <!-- TABLE -->
@@ -166,6 +186,37 @@ Delete
 <?php } ?>
 
 </table>
+<!-- MESSAGE FORM -->
+<div class="card p-4 mt-4">
+
+<h4>Send Message</h4>
+
+<form method="POST" action="send_message.php">
+
+    <select name="user_id" class="form-control mb-2" required>
+        <option value="" disabled selected>Select User</option>
+
+        <?php foreach($users as $u){ ?>
+            <option value="<?= $u['id'] ?>">
+                <?= $u['email'] ?>
+            </option>
+        <?php } ?>
+
+    </select>
+
+    <textarea name="message"
+              class="form-control mb-2"
+              rows="4"
+              placeholder="Type your message here..."
+              required></textarea>
+
+    <button type="submit" class="btn btn-success">
+        Send Message
+    </button>
+
+</form>
+
+</div>
 
 </div>
 
