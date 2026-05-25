@@ -2,11 +2,12 @@
 session_start();
 
 include '../Database/Database.php';
+include '../Header/Header.php';
+$page = basename($_SERVER['PHP_SELF']);
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
     exit();
 }
-
 
 $sql = "SELECT
 u.id as user_id,
@@ -17,7 +18,32 @@ $stmt = $pdo->prepare($sql);
 
 $stmt->execute();
 
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// pagination
+$limit=3;
+//defines the no of limit to show on the page
+if(isset($_GET['page'])){
+    $page=$_GET['page'];
+}else{
+    $page=1;
+}
+$offset=($page-1)*$limit;
+
+//total user
+$totalStmt=$pdo->query("SELECT COUNT(*) FROM users");//counts the total no of records inside db table
+$totalUsers=$totalStmt->fetchColumn();
+$totalPages=ceil($totalUsers/$limit);
+
+$pageSql="SELECT id as user_id, email as user_name
+    FROM users
+    LIMIT :limit OFFSET :offset";
+    //:limit defines max size of data 
+    // :offset define starting point of data
+    $stmt1=$pdo->prepare($pageSql);
+    $stmt1->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt1->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt1->execute();
+$data = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +59,6 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <?php
-include '../Header/Header.php';
-
 ?>
 
 <div class="page-content">
@@ -59,6 +83,39 @@ include '../Header/Header.php';
             </tr>
             <?php } ?>
         </table>
+
+    </div>
+
+    <!-- pagination -->
+    <div class="pagination">
+      <nav aria-label="Page navigation example">
+  <ul class="pagination">
+
+    <!-- Previous -->
+    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+      <a class="page-link" href="?page=<?= $page - 1 ?>">
+        Previous
+      </a>
+    </li>
+
+    <!-- Page Numbers -->
+    <?php for($i = 1; $i <= $totalPages; $i++) { ?>
+      <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+        <a class="page-link" href="?page=<?= $i ?>">
+          <?= $i ?>
+        </a>
+      </li>
+    <?php } ?>
+
+    <!-- Next -->
+    <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+      <a class="page-link" href="?page=<?= $page + 1 ?>">
+        Next
+      </a>
+    </li>
+
+  </ul>
+</nav>
 
     </div>
 
