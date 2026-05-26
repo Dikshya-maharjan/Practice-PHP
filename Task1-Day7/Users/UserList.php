@@ -3,6 +3,7 @@ session_start();
 
 include '../Database/Database.php';
 include '../Header/Header.php';
+include '../Navbar/navbar.php';
 $page = basename($_SERVER['PHP_SELF']);
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
