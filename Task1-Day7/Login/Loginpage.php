@@ -18,44 +18,42 @@ $stmt=$pdo->prepare($sql);
 $stmt->bindParam(":email",$email);
 $stmt->execute();
 $user=$stmt->fetch(PDO::FETCH_ASSOC);//fetches user data
-if($user && password_verify($password,$user['password'])){
-    //$password->what users inputs and $user['password'] is what stored in database
-    
-    //get role id
-$sql = "SELECT role_id FROM role_user WHERE user_id = :user_id";
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':user_id', $user['id']);
-$stmt->execute();
-    $role_id = $stmt->fetchColumn();
+if ($user && password_verify($password, $user['password'])) {
 
-    /* GET ROLE NAME (SAFE) */
+    // get role id(s)
+    $sql = "SELECT role_id FROM role_user WHERE user_id = :user_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':user_id' => $user['id']]);
+
+    $roles = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // default role name
     $role = "user";
 
-  
-    //get role name
-    if($role_id){
-
-        $sql="SELECT role_name FROM roles WHERE id=:id";
-        $stmt=$pdo->prepare($sql);
-        $stmt->bindParam(':id',$role_id);
-        $stmt->execute();
-        $role=$stmt->fetchColumn();
+    if (!empty($roles)) {
+        $sql = "SELECT role_name FROM roles WHERE id = :id LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id' => $roles[0]]);
+        $role = $stmt->fetchColumn();
     }
-        $_SESSION['email']=$user['email'];
-        $_SESSION['role']=$role;
-        $_SESSION['role_id']=$role_id;
-        $_SESSION['message']="Logged in Successfully";
 
-        header("Location:/internphp/task1-day7/HomePage/HomePage.php");
-        
-       
-    }else{
-        echo "<script>
-            alert('Invalid');
-            window.location.href='Login/LoginPage.html';
-        </script>";
-        exit();
-    }
- 
+    /* 🔥 IMPORTANT FIX */
+    $_SESSION['user_id'] = $user['id'];   // THIS WAS MISSING
+    $_SESSION['email'] = $user['email'];
+    $_SESSION['role'] = $role;
+    $_SESSION['role_id'] = $roles[0] ?? null;
+
+    $_SESSION['message'] = "Logged in Successfully";
+
+    header("Location:/InternPHP/Task1-Day7/HomePage/HomePage.php");
+    exit();
+
+} else {
+    echo "<script>
+        alert('Invalid');
+        window.location.href='Login/LoginPage.html';
+    </script>";
+    exit();
+}
 
 ?>
