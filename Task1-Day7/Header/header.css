@@ -34,11 +34,27 @@ body {
     margin: 0;
     font-size: 18px;
 }
-
-/* RIGHT */
 .nav-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+/* push dropdown to right if needed */
+.btn-group {
+    margin-left: auto;
+}
+
+/* logout icon styling */
+.nav-right a {
+    font-size: 20px;
+    color: #000;
+    text-decoration: none;
+}
+
+.nav-right a:hover {
+    color: #0d6efd;
 }
 .nav-right i{
     color: white;
