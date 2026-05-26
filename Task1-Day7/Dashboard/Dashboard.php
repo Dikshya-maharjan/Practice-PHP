@@ -1,6 +1,8 @@
 <?php
 session_start();
 include "../Database/Database.php";
+include '../Header/header.php';
+include '../Navbar/navbar.php';
 if (!isset($_SESSION['email'])) {
     header("Location: LoginPage.html");
     exit();
@@ -36,6 +38,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../Users/UserList.css">
+     <link rel="stylesheet" href="../Header/header.css">
+      <link rel="stylesheet" href="../Navbar/navbar.css">
     <title>Document</title>
 </head>
 <body>
@@ -63,5 +67,8 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button>Back</button>
     </a>
     </div>
-</body>
+</body>     
 </html>
+<?php
+include '../Footer/footer.html';
+?>
