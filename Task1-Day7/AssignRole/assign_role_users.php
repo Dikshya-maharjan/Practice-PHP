@@ -2,6 +2,7 @@
 session_start();
 include_once "../Database/Database.php";
 include '../Header/header.php';
+include '../Navbar/navbar.php';
 
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
@@ -28,7 +29,8 @@ WHERE r.id != 1
 <head>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="../Header/header.css"
+<link rel="stylesheet" href="../Header/header.css">
+<link rel="stylesheet" href="../Navbar/navbar.css">
 </head>
 
 <body>
