@@ -3,12 +3,31 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['email'])) {
+include_once "../Database/Database.php";
+
+if (!isset($_SESSION['user_id'])) {
     header("Location: /InternPHP/Task1-Day7/LoginPage.html");
     exit();
 }
-    $currentPage = basename($_SERVER['PHP_SELF']);
 
+$currentPage = basename($_SERVER['PHP_SELF']);
+
+/* 🔥 FETCH ROLES */
+$roles = [];
+
+$sql = "
+    SELECT r.id, r.role_name
+    FROM roles r
+    JOIN role_user ru ON r.id = ru.role_id
+    WHERE ru.user_id = :user_id
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    ':user_id' => $_SESSION['user_id']
+]);
+
+$roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,8 +44,7 @@ if (!isset($_SESSION['email'])) {
     
         <div class="header-left">
     
-            <img src="/InternPHP/Task1-Day7/Header/logo.png" alt="logo">
-    
+<img src="/InternPHP/Task1-Day7/Header/logo.png" alt="logo" class="logo">    
             <h3>
                 Welcome,
                 <?php echo htmlspecialchars($_SESSION['email']); ?>
@@ -82,6 +100,16 @@ if (!isset($_SESSION['email'])) {
  
 
 </div>
+ <div class="nav-right">
+    <a href="../Logout/logout.php"
+       onclick="return confirm('Are you sure you want to logout?');">
+       
+       <i class="bi bi-box-arrow-right"></i>
+    </a>
+</div>
     </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<!-- add js to enbale dropdown of boostrsap -->
 </body>
 </html>
