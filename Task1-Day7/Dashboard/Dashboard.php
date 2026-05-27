@@ -3,6 +3,7 @@ session_start();
 include "../Database/Database.php";
 include '../Header/header.php';
 include '../Navbar/navbar.php';
+
 if (!isset($_SESSION['email'])) {
     header("Location: LoginPage.html");
     exit();
@@ -12,24 +13,25 @@ if (!isset($_GET['menu_id'])) {
     header("Location: ../HomePage/HomePage.php");
     exit();
 }
+
 $menu_id = $_GET['menu_id'];
-// Get users + roles who can access this menu
+
+/* GET TOTAL USERS */
 $sql = "
-SELECT 
-    u.id AS user_id,
-    u.email AS user_name,
-    r.id AS role_id,
-    r.role_name
+SELECT COUNT(DISTINCT u.id) AS total_users
 FROM role_user ru
 JOIN users u ON ru.user_id = u.id
 JOIN roles r ON ru.role_id = r.id
 JOIN menu_role mr ON mr.role_id = ru.role_id
 WHERE mr.menu_id = :menu_id
 ";
+
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(':menu_id', $menu_id);
 $stmt->execute();
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$totalUsers = $result['total_users'];
 ?>
 
 <!DOCTYPE html>
@@ -37,38 +39,29 @@ $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="../Users/UserList.css">
-     <link rel="stylesheet" href="../Header/header.css">
-      <link rel="stylesheet" href="../Navbar/navbar.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../Header/header.css">
+    <link rel="stylesheet" href="../Navbar/navbar.css">
+
+    <title>Total Users</title>
 </head>
+
 <body>
-    <div class="table-container">
 
+<div class="table-container">
 
-        <table border="1">
-        <tr>
-            <th>User ID</th>
-            <th>User Name</th>
-            <th>Role ID</th>
-            <th>Role Name</th>
-        </tr>
-    
-        <?php foreach ($data as $row) { ?>
-            <tr>
-                <td><?php echo $row['user_id'];?></td>
-                <td><?php echo $row['user_name']; ?></td>
-                <td><?php echo $row['role_id'];?></td>
-                <td><?php echo $row['role_name']; ?></td>
-            </tr>
-        <?php } ?>
-    </table>
+    <h2>Total Users: <?php echo $totalUsers; ?></h2>
+
     <a href="../HomePage/HomePage.php">
-    <button>Back</button>
+        <button>Back</button>
     </a>
-    </div>
-</body>     
+
+</div>
+
+</body>
 </html>
+
 <?php
 include '../Footer/footer.html';
 ?>
