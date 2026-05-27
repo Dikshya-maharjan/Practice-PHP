@@ -2,7 +2,7 @@
 session_start();
 include '../Database/Database.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'superadmin') {
+if (!isset($_SESSION['role_id']) || $_SESSION['role_id'] != 1) {
     die("Access Denied");
 }
 
@@ -16,10 +16,11 @@ ON DUPLICATE KEY UPDATE role_id = VALUES(role_id)
 ";
 
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(':user_id', $user_id);
-$stmt->bindParam(':role_id', $role_id);
-$stmt->execute();
+$stmt->execute([
+    ':user_id' => $user_id,
+    ':role_id' => $role_id
+]);
 
-header("Location: assign_role.php");
+header("Location: assign_role_users.php");
 exit();
 ?>
