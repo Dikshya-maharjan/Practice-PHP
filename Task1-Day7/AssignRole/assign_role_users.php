@@ -1,27 +1,44 @@
 <?php
 session_start();
 include_once "../Database/Database.php";
-include '../Header/header.php';
-include '../Navbar/navbar.php';
 
+/* LOGIN CHECK */
 if(!isset($_SESSION['email'])){
     header("Location:../Login/LoginPage.html");
     exit();
 }
 
+include '../Header/header.php';
+include '../Navbar/navbar.php';
+
 $users = $pdo->query("SELECT id,email FROM users")->fetchAll(PDO::FETCH_ASSOC);
-$roles = $pdo->query("SELECT * FROM roles
-WHERE id !=1
+
+$roles = $pdo->query("
+    SELECT * FROM roles
+    WHERE id != 1
 ")->fetchAll(PDO::FETCH_ASSOC);
 
-$data = $pdo->query("
+$roleFilter = $_GET['role'] ?? '';
+$sql="
 SELECT u.id user_id, u.email user_name, r.id role_id, r.role_name
 FROM role_user ru
-JOIN users u ON ru.user_id = u.id
-JOIN roles r ON ru.role_id = r.id
-WHERE r.id != 1
-")->fetchAll(PDO::FETCH_ASSOC);
+JOIN users u ON ru.user_id=u.id
+JOIN roles r ON ru.role_id=r.id
+WHERE r.id !=1";
 
+
+if ($roleFilter != '') {
+    $sql .= " AND r.id = :role_id";
+}
+
+$stmt = $pdo->prepare($sql);
+
+if ($roleFilter != '') {
+    $stmt->bindParam(':role_id', $roleFilter);
+}
+
+$stmt->execute();
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -37,9 +54,7 @@ WHERE r.id != 1
 
 <div class="container mt-4">
 
-<a href="../HomePage/HomePage.php" class="btn btn-outline-dark mb-3">
-    <i class="bi bi-arrow-left"> </i> 
-</a>
+
 
 <!-- FORM -->
 <div class="card p-4">
@@ -47,17 +62,16 @@ WHERE r.id != 1
 <h4 id="title">Assign Role</h4>
 
 <form method="POST" action="assign_role_process.php">
+
+<input type="hidden" name="edit_mode" id="edit_mode" value="0">
+
 <select name="user_id" id="user_id" class="form-control mb-2" required>
 
-<option value="" selected disabled>
-  Select an Email
-</option>
+<option value="" selected disabled>Select an Email</option>
 
-<?php
-foreach($users as $u){
-?>
+<?php foreach($users as $u){ ?>
 <option value="<?= $u['id'] ?>">
-<?= $u['email'] ?>
+    <?= $u['email'] ?>
 </option>
 <?php } ?>
 
@@ -65,13 +79,11 @@ foreach($users as $u){
 
 <select name="role_id" id="role_id" class="form-control mb-2" required>
 
-<option value="" selected disabled>
-Choose Role
-</option>
+<option value="" selected disabled>Choose Role</option>
 
 <?php foreach($roles as $r){ ?>
 <option value="<?= $r['id'] ?>">
-<?= $r['role_name'] ?>
+    <?= $r['role_name'] ?>
 </option>
 <?php } ?>
 
@@ -84,26 +96,26 @@ Assign Role
 </form>
 
 </div>
-<!-- filter seacrh -->
-<form method="GET" class="mb-3">
 
+<!-- FILTER -->
+<form method="GET" class="mb-1">
 
-    <select name="role" class="form-control mb-2">
-        <option value="">All Roles</option>
+<select name="role" class="form-control mb-2">
+    <option value="">All Roles</option>
 
-        <?php foreach($roles as $r){ ?>
-            <option value="<?= $r['id'] ?>"
-                <?= (isset($_GET['role']) && $_GET['role'] == $r['id']) ? 'selected' : '' ?>>
+    <?php foreach($roles as $r){ ?>
+        <option value="<?= $r['id'] ?>"
+            <?= (isset($_GET['role']) && $_GET['role'] == $r['id']) ? 'selected' : '' ?>>
+            <?= $r['role_name'] ?>
+        </option>
+    <?php } ?>
 
-                <?= $r['role_name'] ?>
-            </option>
-        <?php } ?>
+</select>
 
-    </select>
-
-    <button class="btn btn-primary" onclick="clickFilter()">Filter</button>
+<button class="btn btn-primary" type="submit">Filter</button>
 
 </form>
+
 <br>
 
 <!-- TABLE -->
@@ -120,33 +132,43 @@ Assign Role
 
 <td>
 
-<button class="btn btn-primary"
-data-bs-toggle="modal"
-data-bs-target="#editModal<?= $row['user_id'].'_'.$row['role_id'] ?>">
+<!-- EDIT -->
+<button type="button" class="btn btn-primary"
+onclick="editRole(<?= $row['user_id'] ?>, <?= $row['role_id'] ?>)">
 Edit
 </button>
 
-<!-- MODAL -->
+<!-- DELETE BUTTON -->
+<button type="button"
+class="btn btn-danger"
+data-bs-toggle="modal"
+data-bs-target="#deleteModal<?= $row['user_id'] ?>_<?= $row['role_id'] ?>">
+Delete
+</button>
+
+</td>
+</tr>
+
+<!-- DELETE MODAL (IMPORTANT PART) -->
 <div class="modal fade"
-id="editModal<?= $row['user_id'].'_'.$row['role_id'] ?>"
+id="deleteModal<?= $row['user_id'] ?>_<?= $row['role_id'] ?>"
 tabindex="-1">
 
   <div class="modal-dialog">
-
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title">Edit Role</h5>
+        <h5 class="modal-title">Confirm Delete</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <div class="modal-body">
+        Are you sure you want to delete this role?
 
-        <p>Do you want to edit this role?</p>
+        <br><br>
 
         <strong>User:</strong> <?= $row['user_name'] ?><br>
         <strong>Role:</strong> <?= $row['role_name'] ?>
-
       </div>
 
       <div class="modal-footer">
@@ -154,67 +176,50 @@ tabindex="-1">
         <button type="button"
         class="btn btn-secondary"
         data-bs-dismiss="modal">
-        Close
+        Cancel
         </button>
 
-        <button type="button"
-        class="btn btn-primary"
-        data-bs-dismiss="modal"
-        onclick="editRole(
-            <?= $row['user_id'] ?>,
-            <?= $row['role_id'] ?>
-        )">
-        Update Role
-        </button>
+        <a href="../Button/delete.php?user_id=<?= $row['user_id'] ?>&role_id=<?= $row['role_id'] ?>"
+        class="btn btn-danger">
+        Yes Delete
+        </a>
 
       </div>
 
     </div>
-
   </div>
 
 </div>
 
-<!-- DELETE -->
-<a href="../Button/delete_role.php?user_id=<?= $row['user_id'] ?>&role_id=<?= $row['role_id'] ?>"
-class="btn btn-danger"
-onclick="return confirm('Delete?')">
-Delete
-</a>
-
-</td>
-</tr>
-
 <?php } ?>
 
 </table>
-<!-- MESSAGE FORM -->
+
+<!-- MESSAGE -->
 <div class="card p-4 mt-4">
 
 <h4>Send Message</h4>
 
 <form method="POST" action="send_message.php">
 
-    <select name="user_id" class="form-control mb-2" required>
-        <option value="" disabled selected>Select User</option>
+<select name="user_id" class="form-control mb-2" required>
+    <option value="" disabled selected>Select User</option>
 
-        <?php foreach($users as $u){ ?>
-            <option value="<?= $u['id'] ?>">
-                <?= $u['email'] ?>
-            </option>
-        <?php } ?>
+    <?php foreach($users as $u){ ?>
+        <option value="<?= $u['id'] ?>">
+            <?= $u['email'] ?>
+        </option>
+    <?php } ?>
+</select>
 
-    </select>
+<textarea name="message"
+          class="form-control mb-2"
+          rows="4"
+          required></textarea>
 
-    <textarea name="message"
-              class="form-control mb-2"
-              rows="4"
-              placeholder="Type your message here..."
-              required></textarea>
-
-    <button type="submit" class="btn btn-success">
-        Send Message
-    </button>
+<button type="submit" class="btn btn-success">
+Send Message
+</button>
 
 </form>
 
@@ -222,28 +227,24 @@ Delete
 
 </div>
 
-
-
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 function editRole(user, role){
-    document.getElementById("user_id").value=user;
-    document.getElementById("role_id").value=role;
-  
-//jaba edit btn click huncha jaba update role bhanera title aucha
+
+    document.getElementById("user_id").value = user;
+    document.getElementById("role_id").value = role;
+
+    document.getElementById("edit_mode").value = 1;
+
     document.getElementById("title").innerText = "Update Role";
-    //assign role
     document.getElementById("btn").innerText = "Update Role";
-    document.getElementById("btn").classList.remove("btn-success");
-    document.getElementById("btn").classList.add("btn-primary");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
-<?php
-include '../Footer/footer.html';
-?>
+
+<?php include '../Footer/footer.html'; ?>
+
 </body>
 </html>
