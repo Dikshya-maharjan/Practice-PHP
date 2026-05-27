@@ -56,6 +56,7 @@ $data = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="UserList.css">
     <link rel="stylesheet" href="../Header/header.css">
+    <link rel="stylesheet" href="../Navbar/navbar.css">
     <title>User List</title>
 </head>
 <body>
