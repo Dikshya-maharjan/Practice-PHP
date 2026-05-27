@@ -2,7 +2,7 @@
 session_start();
 
 include "../Database/Database.php";
-
+$menu_id = $_GET['menu_id'] ?? 1;
 if(!isset($_SESSION['email'])){
     header("Location: LoginPage.html");
     exit();
@@ -42,9 +42,14 @@ if($user_id){
     
     $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     include "../Header/Header.php";
     include "../Navbar/navbar.php";
+    
     ?>
+    <?php
+$menu_id = $_GET['menu_id'] ?? 1; // default = Dashboard
+?>
 
 <!DOCTYPE html>
 <html>
@@ -55,7 +60,7 @@ if($user_id){
 
     <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
     <link rel="stylesheet" href="../Header/header.css">
-
+    <link rel="stylesheet" href="../Navbar/navbar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
@@ -66,7 +71,11 @@ if($user_id){
 
 <!-- MAIN CONTENT -->
 <div class="mainContainer">
-<!-- <?php
+    <?php
+        include '../Images/upload_image.html';
+        include '../Images/upload.php';
+    ?>
+ <!--<?php
 if(isset($_SESSION['message'])){
     echo "<div class='success'>
             " . $_SESSION['message'] . "
