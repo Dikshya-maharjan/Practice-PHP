@@ -1,20 +1,19 @@
 <?php
 session_start();
+
 include "../Database/Database.php";
-include '../Header/header.php';
-include '../Navbar/navbar.php';
 
 if (!isset($_SESSION['email'])) {
     header("Location: LoginPage.html");
     exit();
 }
 
-if (!isset($_GET['menu_id'])) {
-    header("Location: ../HomePage/HomePage.php");
-    exit();
-}
+/* DEFAULT DASHBOARD MENU */
+$menu_id = $_GET['menu_id'] ?? 1;
 
-$menu_id = $_GET['menu_id'];
+/* INCLUDE HEADER + NAVBAR */
+include '../Header/header.php';
+include '../Navbar/navbar.php';
 
 /* GET TOTAL USERS */
 $sql = "
@@ -27,41 +26,89 @@ WHERE mr.menu_id = :menu_id
 ";
 
 $stmt = $pdo->prepare($sql);
-$stmt->bindParam(':menu_id', $menu_id);
+$stmt->bindParam(':menu_id', $menu_id, PDO::PARAM_INT);
 $stmt->execute();
 
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-$totalUsers = $result['total_users'];
+
+$totalUsers = $result['total_users'] ?? 0;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
 
     <link rel="stylesheet" href="../Users/UserList.css">
     <link rel="stylesheet" href="../Header/header.css">
     <link rel="stylesheet" href="../Navbar/navbar.css">
 
-    <title>Total Users</title>
+    <style>
+        .table-container{
+            padding: 30px;
+        }
+
+        .dashboard-card{
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .dashboard-card h2{
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card p{
+            font-size: 30px;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .back-btn{
+            margin-top: 20px;
+        }
+
+        .back-btn button{
+            padding: 10px 20px;
+            border: none;
+            background: #0d6efd;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 
 <div class="table-container">
 
-    <h2>Total Users: <?php echo $totalUsers; ?></h2>
+    <div class="dashboard-card">
 
-    <a href="../HomePage/HomePage.php">
-        <button>Back</button>
-    </a>
+        <h2>Total Users</h2>
+
+        <p>
+            <?php echo $totalUsers; ?>
+        </p>
+
+    </div>
+
+    <div class="back-btn">
+        <a href="../HomePage/HomePage.php?menu_id=1">
+            <button>Back</button>
+        </a>
+    </div>
 
 </div>
 
 </body>
 </html>
 
-<?php
-include '../Footer/footer.html';
-?>
+<?php include '../Footer/footer.html'; ?>
