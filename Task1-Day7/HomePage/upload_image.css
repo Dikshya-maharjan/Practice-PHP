@@ -1,0 +1,67 @@
+body {
+ font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    align-content: space-around;
+    flex-direction: column;
+}
+
+/* FORM BOX */
+form {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* FILE INPUT */
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+/* UPLOAD BUTTON */
+button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #084cdf;
+}
+.delete-btn {
+    display: inline-block;
+    margin-top: 8px;
+
+    padding: 6px 12px;
+
+    background: #e74c3c;
+    color: white;
+
+    border-radius: 6px;
+    text-decoration: none;
+
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
