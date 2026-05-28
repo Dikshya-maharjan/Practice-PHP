@@ -31,21 +31,22 @@ include_once "../Database/Database.php";
 
             foreach ($menus as $menu) {
                 $link = match ($menu['id']) {
-                    1 => '../Dashboard/Dashboard.php',
+                    1 => '../HomePage/HomePage.php',
                     2 => '../AssignRole/assign_role_users.php',
                     3 => '../Users/UserList.php',
                     4 => '../Report/Reports.php',
                     default => '#'
                 };
         ?>
-            <?php
+       <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-$isActive = ($menu['id'] == 1 && $currentPage == 'HomePage.php');
+$activeMenuId = $_GET['menu_id'] ?? 1;
 ?>
 
 <a href="<?= $link ?>?menu_id=<?= $menu['id'] ?>"
-class="nav-link <?= ($menu['id'] == $menu_id) ? 'active' : '' ?>"
+   class="nav-link <?= ($menu['id'] == $activeMenuId) ? 'active' : '' ?>">
+
     <i class="bi bi-house"></i>
 
     <span><?= htmlspecialchars($menu['name']) ?></span>
