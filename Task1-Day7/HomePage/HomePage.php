@@ -1,107 +1,69 @@
 <?php
 session_start();
-
 include "../Database/Database.php";
-$menu_id = $_GET['menu_id'] ?? 1;
-if(!isset($_SESSION['email'])){
+
+if (!isset($_SESSION['email'])) {
     header("Location: LoginPage.html");
     exit();
-    }
-    
-    /*
-    ROLE SWITCH HANDLEr
-    ensures navbar updates when role changes
-    */
-    if(isset($_GET['role_id'])){
-        $_SESSION['role_id'] = $_GET['role_id'];
+}
 
-        header("Location: HomePage.php");
-        exit();
-        }
-        
-        
-        $user_id = $_SESSION['user_id'] ?? null;
-        
-$roles = [];
-
-/*
-GET ALL ROLES OF CURRENT USER
-*/
-if($user_id){
-    
-    $sql = "
-    SELECT r.id, r.role_name
-    FROM roles r
-    JOIN role_user ru ON r.id = ru.role_id
-    WHERE ru.user_id = :user_id
-    ";
-    
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    
-    $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    
-    include "../Header/Header.php";
-    include "../Navbar/navbar.php";
-    
-    ?>
-    <?php
-$menu_id = $_GET['menu_id'] ?? 1; // default = Dashboard
+$menu_id = $_GET['menu_id'] ?? 1;
 ?>
 
 <!DOCTYPE html>
-<html>
-    
-    <head>
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <title>Home</title>
 
-    <link rel="stylesheet" href="/InternPHP/Task1-Day7/Homepage/Homepage.css">
     <link rel="stylesheet" href="../Header/header.css">
     <link rel="stylesheet" href="../Navbar/navbar.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="../Homepage/Homepage.css">
 </head>
 
 <body>
 
+<?php
+include '../Header/header.php';
+include '../Navbar/navbar.php';
+?>
 
-
-<!-- MAIN CONTENT -->
 <div class="mainContainer">
-    <?php
-        include '../Images/upload_image.html';
-        include '../Images/upload.php';
-    ?>
- <!--<?php
-if(isset($_SESSION['message'])){
-    echo "<div class='success'>
-            " . $_SESSION['message'] . "
-          </div>";
-}
-?> 
 
-<h2>
-    Welcome,
-    <?php echo $_SESSION['email']; ?>
-</h2>
+<?php
+/* DASHBOARD */
+$sql = "
+SELECT COUNT(DISTINCT u.id) AS total_users
+FROM role_user ru
+JOIN users u ON ru.user_id = u.id
+JOIN roles r ON ru.role_id = r.id
+JOIN menu_role mr ON mr.role_id = ru.role_id
+WHERE mr.menu_id = :menu_id
+";
 
-<p class="role">
-    Logged in as:
-    <span>
-        <?php echo htmlspecialchars($_SESSION['role']); ?>
-    </span>
-</p>-->
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':menu_id', $menu_id);
+$stmt->execute();
 
-<!-- ROLE DROPDOWN -->
+$totalUsers = $stmt->fetch(PDO::FETCH_ASSOC)['total_users'] ?? 0;
+?>
+
+<div class="dashboard-card">
+    <h2>Dashboard</h2>
+    <h3>Total Users</h3>
+    <p><?= $totalUsers ?></p>
+</div>
 
 
 </div>
+<!-- IMPORTANT: SAFE INCLUDE -->
+ <div class="img-card">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<!-- add js to enbale dropdown of boostrsap -->
+     <div class="upload-section">
+         <?php include __DIR__ . '/upload.php'; ?>
+     </div>
+ </div>
+
 </body>
 </html>
 
