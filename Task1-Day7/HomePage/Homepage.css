@@ -8,9 +8,14 @@
 
 /* BODY */
 body {
-    background: #f7f9fc;
-    color: #2c2c2c;
-    padding-bottom: 60px;
+       font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    
 }
 
 /* NAVBAR */
@@ -30,6 +35,7 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 
     text-align: center;
+    flex-direction: column;
 }
 
 /* TITLE */
@@ -81,24 +87,35 @@ select {
     font-size: 14px;
 }
 
-/* FOOTER */
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+/* IMAGE CARD WRAPPER */
+.img-card {
+    width: 95%;
+    max-width: 650px;
 
+    margin: 20px auto;
+
+    background: #ffffff;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.upload-section {
     width: 100%;
 
-    background: #1f1f1f;
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    flex-direction: column;
     text-align: center;
-
-    padding: 10px;
-
-    font-size: 14px;
 }
-
 /* RESPONSIVE */
 @media (max-width: 600px) {
 
