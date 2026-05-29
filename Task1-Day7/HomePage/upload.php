@@ -2,30 +2,30 @@
 include '../Database/Database.php';
 
 /*  DELETE IMAGE  */
-// if (isset($_GET['delete_id'])) {
+if (isset($_GET['delete_id'])) {
 
-//     $delete_id = (int) $_GET['delete_id'];
+    $delete_id = (int) $_GET['delete_id'];
 
 //     // GET FILE PATH
-//     $stmt = $pdo->prepare("SELECT file_path FROM images WHERE id = :id");
-//     $stmt->execute([':id' => $delete_id]);
-//     $image = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare("SELECT file_path FROM images WHERE id = :id");
+    $stmt->execute([':id' => $delete_id]);
+    $image = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     if ($image) {
+    if ($image) {
 
 //         // DELETE FILE FROM FOLDER
-//         if (file_exists($image['file_path'])) {
-//             unlink($image['file_path']);
-//         }
+        if (file_exists($image['file_path'])) {
+            unlink($image['file_path']);
+        }
 
 //         // DELETE FROM DB
-//         $delStmt = $pdo->prepare("DELETE FROM images WHERE id = :id");
-//         $delStmt->execute([':id' => $delete_id]);
-//     }
+        $delStmt = $pdo->prepare("DELETE FROM images WHERE id = :id");
+        $delStmt->execute([':id' => $delete_id]);
+    }
 
-//     header("Location: ../HomePage/HomePage.php?page=" . ($_GET['page'] ?? 1));
-//     exit();
-// }
+    header("Location: ../HomePage/HomePage.php?page=" . ($_GET['page'] ?? 1));
+    exit();
+}
 
 /*  UPLOAD IMAGE  */
 if (isset($_POST['submit'])) {
