@@ -52,7 +52,7 @@ input[type="password"]:focus {
     box-shadow: 0 0 5px rgba(79,172,254,0.5);
 }
 
-#login {
+#button {
     width: 100%;
     padding: 10px;
     margin-top: 15px;
