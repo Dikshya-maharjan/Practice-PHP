@@ -1,0 +1,20 @@
+
+/*  HEADER  */
+header {
+    background: #1f2a44;
+    color: white;
+    padding: 18px 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+
+/*  FOOTER  */
+footer {
+    background: #1f2a36;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    margin-top: auto;
+    font-size: 14px;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+}
