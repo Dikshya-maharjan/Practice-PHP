@@ -21,8 +21,17 @@ $roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
     <title>Manage Roles</title>
 </head>
 <body>
-
+<?php if (isset($_GET['msg']) && $_GET['msg'] == 'updated'): ?>
+    <p style="color:green; text-align:center;">
+        Role updated successfully ✅
+    </p>
+<?php endif; ?>
+<br>
+<a href="../index.php">
+    <button>⬅ Back to Dashboard</button>
+</a>
 <h1>Admin - Assign Roles</h1>
+
 
 <table border="1" cellpadding="10">
     <tr>
@@ -34,7 +43,7 @@ $roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
 
     <?php foreach ($users as $user): ?>
     <tr>
-        <form method="POST" action="update_role.php">
+        <form method="POST" action="update_roles.php">
             <td>
                 <?php echo $user['name']; ?>
                 <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
