@@ -8,17 +8,18 @@ if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
+    //  validation
     if (empty($username) || empty($email) || empty($password)) {
         echo "<script>
-            alert('Fields should not be empty');
-            window.location.href='loginpage.php';
-        </script>";
+                alert('All fields are required');
+                window.location.href='loginpage.php';
+              </script>";
         exit();
     }
 
-    // get user by email + name
-    $sql = "SELECT * FROM users 
-            WHERE name = :name 
+    // Find user
+    $sql = "SELECT * FROM users
+            WHERE name = :name
             AND email = :email";
 
     $stmt = $pdo->prepare($sql);
@@ -30,49 +31,86 @@ if (isset($_POST['submit'])) {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // verify password
+    // Verify password
     if ($user && password_verify($password, $user['password'])) {
 
+        // Get user role
+        $roleSql = "
+            SELECT r.role_name
+            FROM roles r
+            INNER JOIN user_roles ur
+                ON r.id = ur.role_id
+            WHERE ur.user_id = :user_id
+            LIMIT 1
+        ";
+
+        $roleStmt = $pdo->prepare($roleSql);
+        $roleStmt->execute([
+            ':user_id' => $user['id']
+        ]);
+
+        $role = $roleStmt->fetchColumn();
+
+        if (!$role) {
+            $role = 'user';
+        }
+
+        // Create session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
+        $_SESSION['role'] = $role;
 
         header("Location: ../index.php");
         exit();
 
     } else {
+
         echo "<script>
-            alert('Invalid login credentials');
-            window.location.href='loginpage.php';
-        </script>";
+                alert('Invalid login credentials');
+                window.location.href='loginpage.php';
+              </script>";
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
     <link rel="stylesheet" href="login.css">
-    <title>Login Page</title>
 </head>
 <body>
-    <main>
-        <h1>Log into your account</h1>
-        <section>
+
+<main>
+    <h1>Log into your account</h1>
+
+    <section>
         <form method="POST" action="loginpage.php">
-            <label>Username</label><br/>
-            <input type="text" name="name" placeholder='username'/><br/>
-            <label>Email</label><br/>
-            <input type="email" name="email" placeholder='email@gmail.com'/><br/>
-            <label>Password</label><br/>
-            <input type="password" name="password" /><br/>
-            <input type="submit" name="submit" id="button" value="Login"/>
-<p>Don't have an account?<a href="../Signup/signup.php">Sign up</a></p>            
+
+            <label>Username</label><br>
+            <input type="text" name="name" placeholder="Username"><br>
+
+            <label>Email</label><br>
+            <input type="email" name="email" placeholder="email@gmail.com"><br>
+
+            <label>Password</label><br>
+            <input type="password" name="password"><br>
+
+            <input type="submit" name="submit" id="button" value="Login">
+
+            <p>
+                Don't have an account?
+                <a href="../Signup/signup.php">Sign up</a>
+            </p>
 
         </form>
-
-</section>
+    </section>
 </main>
+
 </body>
 </html>
