@@ -1,4 +1,21 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
+/* BODY */
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+main{
+    flex:1;
+}
 /*  HEADER  */
 header {
     background: #1f2a44;
@@ -6,15 +23,111 @@ header {
     padding: 18px 30px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+header h2{
+    color:rgb(189, 186, 186);
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.navbar h2 {
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.navbar nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 12px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.navbar nav a:hover {
+    background: #4f6df5;
+}
+
+/*  MAIN DASHBOARD  */
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    color: #1f2a44;
+    font-size: 28px;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 10px;
+    color: #34495e;
+}
+
+p {
+    text-align: center;
+    margin-top: 8px;
+    color: #555;
+}
+
+/* MENU CONTAINER (CARD STYLE) */
+ul {
+    list-style: none;
+    width: 320px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* MENU ITEMS */
+ul li {
+    margin: 12px 0;
+}
+
+/* LINKS */
+ul li a {
+    display: block;
+    text-decoration: none;
+    background: #4f6df5;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+ul li a:hover {
+    background: #3b55d1;
+    transform: translateY(-2px);
+}
+
+/* LOGOUT BUTTON */
+button {
+    display: block;
+    margin: 20px auto 50px;
+    padding: 12px 22px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
 
 /*  FOOTER  */
-footer {
-    background: #1f2a36;
-    color: white;
-    text-align: center;
-    padding: 18px;
-    margin-top: auto;
-    font-size: 14px;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+footer{
+    background:#1f2a36;
+    color:white;
+    text-align:center;
+    padding:18px;
 }
