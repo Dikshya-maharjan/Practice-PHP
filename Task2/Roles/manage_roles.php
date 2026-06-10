@@ -126,7 +126,7 @@ $roles = $pdo->query("SELECT * FROM roles")->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-<!-- FOOTER (IMPORTANT: inside body, not outside HTML) -->
+<!-- FOOTER -->
 <?php include '../Footer/footer.php'; ?>
 
 <!-- Bootstrap JS -->
