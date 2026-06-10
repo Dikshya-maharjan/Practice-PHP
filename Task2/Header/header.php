@@ -19,19 +19,17 @@ if (session_status() === PHP_SESSION_NONE) {
         <h2>Blog System</h2>
 
         <nav>
-            <a href="../Task2/index.php">Home</a>
-            <a href="../Task2/create_article.php">Create Article</a>
-            <a href="../Task2/view_articles.php">Articles</a>
+            <a href="../index.php">Home</a>
+            <a href="Article/create_articles.php">Create Article</a>
+            <a href="Article/view_articles.php">Articles</a>
             
-
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <a href="../Login/logout.php" class="btn btn-danger">
-            <i class="bi bi-box-arrow-right"></i> 
-        </a>
-                </a>
-            <?php else: ?>
-                <a href="../Login/loginpage.php">Login</a>
-            <?php endif; ?>
+<?php if (isset($_SESSION['user_id'])): ?>
+    <a href="Logout/logout.php" class="btn btn-danger">
+        <i class="bi bi-box-arrow-right"></i>
+    </a>
+<?php else: ?>
+    <a href="../Login/loginpage.php">Login</a>
+<?php endif; ?>
         </nav>
     </div>
 </header>
